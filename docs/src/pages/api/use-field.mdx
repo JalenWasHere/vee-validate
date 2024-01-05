@@ -24,23 +24,25 @@ The most basic usage looks like this:
 </template>
 
 <script setup>
-import { useField } from 'vee-validate';
+  import { useField } from 'vee-validate';
 
-// a simple `name` field with basic required validator
-const { value, errorMessage } = useField('name', inputValue => !!inputValue);
+  // a simple `name` field with basic required validator
+  const { value, errorMessage } = useField('name', inputValue => !!inputValue);
 </script>
 ```
 
 Whenever the `value` ref is updated it will be validated and the `errorMessage` ref will be automatically filled with the first error message. Usually you would bind the `value` ref to your inputs using `v-model` or any other means and whenever you want to validate your field you update the `value` binding with the new value.
 
+###
+
 Additionally you can use `yup` as a validator:
 
 ```vue
 <script setup>
-import { useField } from 'vee-validate';
-import * as yup from 'yup';
+  import { useField } from 'vee-validate';
+  import * as yup from 'yup';
 
-const { value, errorMessage } = useField('email', yup.string().email().required());
+  const { value, errorMessage } = useField('email', yup.string().email().required());
 </script>
 ```
 
@@ -57,10 +59,10 @@ value.value = 1; // ⛔️  Error
 value.value = 'test@example.com'; // ✅
 
 resetField({
-  value: 1, // ⛔️  Error
+    value: 1, // ⛔️  Error
 });
 resetField({
-  value: 'test@example.com', // ✅
+    value: 'test@example.com', // ✅
 });
 ```
 
@@ -130,11 +132,11 @@ Contains useful information/flags about the field status, should be treated as *
 
 ```ts
 interface FieldMeta {
-  touched: boolean; // if the field has been blurred (via handleBlur)
-  dirty: boolean; // if the field has been manipulated (via handleChange)
-  valid: boolean; // if the field doesn't have any errors
-  pending: boolean; // if validation is in progress
-  initialValue?: any; // the field's initial value
+    touched: boolean; // if the field has been blurred (via handleBlur)
+    dirty: boolean; // if the field has been manipulated (via handleChange)
+    valid: boolean; // if the field doesn't have any errors
+    pending: boolean; // if validation is in progress
+    initialValue?: any; // the field's initial value
 }
 ```
 
@@ -298,10 +300,10 @@ It sets the `dirty` meta flag to `true`
 </template>
 
 <script setup>
-const { handleChange } = useField('field');
+  const { handleChange } = useField('field');
 
-handleChange('new value'); // update field value and validate it
-handleChange('new value 2', false); // update field value without validating it (you have to turn off validateOnValueUpdate)
+  handleChange('new value'); // update field value and validate it
+  handleChange('new value 2', false); // update field value without validating it (you have to turn off validateOnValueUpdate)
 </script>
 ```
 
@@ -319,7 +321,7 @@ Sets the `touched` meta flag to `true`
 </template>
 
 <script setup>
-const { handleBlur } = useField('field');
+  const { handleBlur } = useField('field');
 </script>
 ```
 
@@ -356,3 +358,41 @@ checked.value; // true or false
 ```
 
 For more information on how you might use the `checked` property, check the [custom checkboxes example](/examples/custom-checkboxes).
+
+## Additional options
+
+To pass additional configuration to your fields you can use more options.
+
+```vue
+<template>
+  <div>
+    <input v-model="value" />
+    <span>{{ errorMessage }}</span>
+  </div>
+</template>
+
+<script setup>
+  import { useField } from 'vee-validate';
+
+  // a simple `company` field with some options passed into it
+  const { value, errorMessage } = useField('company', ..., {
+    label: 'Your company',
+    type: 'text',
+    initialValue: ''
+  });
+</script>
+```
+
+| Field options                          |
+|----------------------------------------|
+| `type`                                 |
+| `label`                                |
+| `initialValue`                         |
+| `validateOnMount`                      |
+| `bails `                               |
+| `standalone`                           |
+| `validateOnValueUpdate`                |
+| `keepValueOnUnmount`                   |
+| `syncVModel`                           |
+| `checkedValue` (checkbox/radio only)   |
+| `uncheckedValue` (checkbox/radio only) |
